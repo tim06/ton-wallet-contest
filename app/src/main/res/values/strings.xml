@@ -1,0 +1,164 @@
+<resources>
+    <string name="app_name">wallet-contest</string>
+
+    <string name="start_screen_title">TON Wallet</string>
+    <string name="start_screen_description">TON Wallet allows you to make fast and \nsecure blockchain-based payments \n without intermediaries.</string>
+    <string name="start_screen_create">Create my wallet</string>
+    <string name="start_screen_import">Import existing wallet</string>
+
+    <string name="create_congratulations_title">Congratulations</string>
+    <string name="create_congratulations_description">Your TON Wallet has just been created.\nOnly you control it.\n\nTo be able to always have access to it, please write down secret words and set up a secure passcode.</string>
+    <string name="create_congratulations_proceed">Proceed</string>
+
+    <string name="create_recovery_title">Your Recovery Phrase</string>
+    <string name="create_recovery_description">Write down these 24 words in this exact order and keep them in a secure place. Do not share this list with anyone. If you lose it, you will irrevocably lose access to your TON account.</string>
+    <string name="create_recovery_done">Done</string>
+    <string name="create_recovery_sure_done_dialog_title">Sure done?</string>
+    <string name="create_recovery_sure_done_dialog_description">You didn’t have enough time to \nwrite these words down.</string>
+    <string name="create_recovery_sure_done_dialog_skip">Skip</string>
+    <string name="create_recovery_sure_done_dialog_ok">OK, sorry</string>
+
+    <string name="create_test_time_title">Test Time!</string>
+    <string name="create_test_time_description">Let’s check that you wrote them down correctly. Please enter the words \n%1$d, %2$d and %3$d.</string>
+    <string name="create_test_time_continue">Continue</string>
+    <string name="create_test_time_dialog_title">Incorrect words</string>
+    <string name="create_test_time_dialog_description">The secret words you have entered\ndo not match the ones in the list.</string>
+    <string name="create_test_time_dialog_see_words">See words</string>
+    <string name="create_test_time_dialog_try_again">Try again</string>
+
+    <string name="create_perfect_title">Perfect!</string>
+    <string name="create_perfect_description">Now set up a passcode to secure\ntransactions.</string>
+    <string name="create_perfect_option">Enable Biometric Auth</string>
+    <string name="create_perfect_button">Set a Passcode</string>
+
+    <string name="create_passcode_title">Set a Passcode</string>
+    <string name="create_passcode_description">Enter the %d digits in the passcode.</string>
+    <string name="create_passcode_options">Passcode options</string>
+    <string name="create_passcode_select_option">%d-digit code</string>
+    <string name="create_passcode_confirm">Confirm a Passcode</string>
+
+    <string name="create_ready_to_go_title">Ready to go!</string>
+    <string name="create_ready_to_go_description">You are all set. Now you have a wallet that\nonly you control — directly, without\nmiddlemen or bankers. </string>
+    <string name="create_ready_to_go_button">View my wallet</string>
+
+    <string name="create_biometric_title">Enable fingerprint</string>
+    <string name="create_biometric_description">Fingerprint allows you to open your\nwallet faster without having to enter your\npassword.</string>
+    <string name="create_biometric_skip">Skip</string>
+
+    <string name="import_secret_words_title">24 Secret Words</string>
+    <string name="import_secret_words_description">You can restore access to your wallet by entering 24 words you wrote when down you creating the wallet.</string>
+    <string name="import_secret_words_no_words">I don’t have those</string>
+    <string name="import_secret_words_continue">Continue</string>
+    <string name="import_secret_words_dialog_title">Incorrect words</string>
+    <string name="import_secret_words_dialog_description">Sorry, you have entered incorrect secret words. Please double check and try again.</string>
+    <string name="import_secret_words_dialog_ok">OK</string>
+
+    <string name="import_no_words_title">Too Bad!</string>
+    <string name="import_no_words_description">Without the secret words you can’t restore access to the wallet.</string>
+    <string name="import_no_words_button_first">Enter 24 secret words</string>
+    <string name="import_no_words_button_second">Create a new empty wallet instead</string>
+
+    <string name="import_success_title">Your wallet has just\nbeen imported!</string>
+    <string name="import_success_button">Proceed</string>
+
+    <string name="wallet_main_status_waiting_for_network">Waiting for network</string>
+    <string name="wallet_main_status_connecting">Connecting</string>
+    <string name="wallet_main_status_updating">Updating</string>
+    <string name="wallet_main_refresh_swipe">Swipe down to refresh</string>
+    <string name="wallet_main_refresh_release">Release to refresh</string>
+    <string name="wallet_main_receive">Receive</string>
+    <string name="wallet_main_send">Send</string>
+
+    <string name="wallet_history_to">to</string>
+    <string name="wallet_history_from">from</string>
+    <string name="wallet_history_fee">%s storage fee</string>
+
+    <string name="wallet_created_title">Wallet Created</string>
+    <string name="wallet_created_description">Your wallet address</string>
+
+    <string name="wallet_connect_to_fragment_title">Connect to %1$s</string>
+    <string name="wallet_connect_to_fragment_description">%1$s is requesting access to your wallet address %2$s %3$s.</string>
+    <string name="wallet_connect_to_fragment_additional">Be sure to check the service address before connecting the wallet.</string>
+    <string name="wallet_connect_to_fragment_connect">Connect wallet</string>
+
+    <string name="wallet_connect_ton_transfer">TON Transfer</string>
+    <string name="wallet_connect_ton_recipient">Recipient</string>
+    <string name="wallet_connect_ton_fee">Fee</string>
+    <string name="wallet_connect_ton_cancel">Cancel</string>
+    <string name="wallet_connect_ton_confirm">Confirm</string>
+
+    <string name="receive_ton_title">Receive TON</string>
+    <string name="receive_ton_description">Share this address with other TON\nwallet owners to receive TON from them.</string>
+    <string name="receive_ton_share">Share Wallet Address</string>
+
+    <string name="transaction_title">Transaction</string>
+    <string name="transaction_fee">%s transaction fee</string>
+    <string name="transaction_date">%1s at %2s</string>
+    <string name="transaction_details">Details</string>
+    <string name="transaction_sender">Sender</string>
+    <string name="transaction_recipient">Recipient</string>
+    <string name="transaction_recipient_address">Recipient address</string>
+    <string name="transaction_sender_address">Sender address</string>
+    <string name="transaction_transaction">Transaction</string>
+    <string name="transaction_view_explorer">View in explorer</string>
+    <string name="transaction_pending">Pending</string>
+    <string name="transaction_canceled">Canceled</string>
+    <string name="transaction_send_ton">Send TON to this address</string>
+    <string name="transaction_retry_send_ton">Retry to send TON to this address</string>
+
+    <string name="send_title">Send TON</string>
+    <string name="send_text_field_title">Wallet Address or Domain</string>
+    <string name="send_text_field_hint">Enter Wallet Address or Domain...</string>
+    <string name="send_text_field_description">Paste the 24-letter wallet address of the recipient here or TON DNS.</string>
+    <string name="send_paste">Paste</string>
+    <string name="send_scan">Scan</string>
+    <string name="send_recent">Recent</string>
+    <string name="send_continue">Continue</string>
+    <string name="send_invalid_address">Invalid Address</string>
+    <string name="send_invalid_address_description">Address entered does not belong to TON</string>
+    <string name="send_send_to">Send to:</string>
+    <string name="send_edit">Edit</string>
+    <string name="send_send_all">Send all</string>
+    <string name="send_insufficient_funds">Insufficient funds</string>
+    <string name="send_comment_field_title">Comment (Optional)</string>
+    <string name="send_comment_field_hint">Description of the payment</string>
+    <string name="send_comment_field_description">The comment is visible to everyone. You must include the note when sending to an exchange.</string>
+    <string name="send_comment_field_description_count_left">%d characters left.</string>
+    <string name="send_comment_field_description_count_exceeded">Message size has been exceeded by %d characters.</string>
+    <string name="send_details_title">Details</string>
+    <string name="send_details_recipient">Recipient</string>
+    <string name="send_details_amount">Amount</string>
+    <string name="send_details_fee">Fee</string>
+    <string name="send_details_confirm_and_send">Confirm and send</string>
+
+    <string name="send_sending_title">Sending TON</string>
+    <string name="send_sending_description">Please wait a few seconds for your\ntransaction to be processed…</string>
+    <string name="send_sending_button">View My Wallet</string>
+
+    <string name="send_sending_done_title">Done!</string>
+    <string name="send_sending_done_description">%s Toncoin have been sent to</string>
+    <string name="send_sending_done_button">View My Wallet</string>
+
+    <string name="scan_qr_title">Scan QR Code</string>
+    <string name="scan_qr_permission_title">No Camera Access</string>
+    <string name="scan_qr_permission_description">TON Wallet doesn’t have access to the camera. Please enable camera access to scan QR codes.</string>
+    <string name="scan_qr_permission_open_settings">Open Settings</string>
+
+    <string name="settings_title">Wallet Settings</string>
+    <string name="settings_general_title">General</string>
+    <string name="settings_general_notifications">Notifications</string>
+    <string name="settings_general_active_address">Active address</string>
+    <string name="settings_general_primary_currency">Primary currency</string>
+    <string name="settings_general_list_of_tokens">List of tokens</string>
+    <string name="settings_general_dapps">dApps</string>
+
+    <string name="settings_security_title">Security</string>
+    <string name="settings_security_show_recovery_phrase">Show recovery phrase</string>
+    <string name="settings_security_change_passcode">Change passcode</string>
+    <string name="settings_security_biometric_auth">Biometric Auth</string>
+    <string name="settings_security_delete_wallet">Delete Wallet</string>
+
+    <string name="transaction_encrypted_message">Encrypted message</string>
+    <string name="WalletShareQr">Share QR</string>
+    <string name="fee">≈ %1$s TON</string>
+</resources>

@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.github.tim06.wallet_contest",
+  "variantName": "afatRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 100006,
+      "versionName": "1.0",
+      "outputFile": "app-afat-release.apk"
+    }
+  ],
+  "elementType": "File"
+}
