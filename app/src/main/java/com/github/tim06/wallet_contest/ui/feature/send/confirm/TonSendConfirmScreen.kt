@@ -29,6 +29,7 @@ import com.github.tim06.wallet_contest.ui.theme.Error2Color
 import com.github.tim06.wallet_contest.ui.theme.Error2Color12
 import com.github.tim06.wallet_contest.ui.theme.SecondaryTextColor
 import com.github.tim06.wallet_contest.ui.theme.WarningColor
+import com.github.tim06.wallet_contest.util.formatCurrency
 import com.github.tim06.wallet_contest.util.toTonLong
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -38,7 +39,7 @@ import kotlinx.serialization.json.Json
 fun TonSendConfirmScreen(
     tonWalletClient: TonWalletClient,
     address: String? = null,
-    amount: String? = null,
+    amount: Long? = null,
     commentExtra: String? = null,
     viewModel: TonSendConfirmViewModel = viewModel(
         factory = TonSendConfirmViewModelFactory(tonWalletClient, address, amount, commentExtra)
@@ -128,7 +129,7 @@ fun TonSendConfirmScreen(
             Spacer(modifier = Modifier.height(12.dp))
             TonSendConfirmRows(
                 recipientAddress = address?.let { Json.decodeFromString<TonSendRecipientModel>(it).address },
-                amountExtra = amount,
+                amountExtra = amount?.formatCurrency().toString(),
                 feeExtra = fee
             )
             Spacer(modifier = Modifier.height(24.dp))

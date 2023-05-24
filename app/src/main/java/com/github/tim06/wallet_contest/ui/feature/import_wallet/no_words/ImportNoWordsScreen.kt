@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.github.tim06.wallet_contest.R
 import com.github.tim06.wallet_contest.ui.components.InfoScreen
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 fun ImportNoWordsScreen(
     onBackClick: () -> Unit,

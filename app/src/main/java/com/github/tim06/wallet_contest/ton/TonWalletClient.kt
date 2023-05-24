@@ -21,6 +21,7 @@ import com.github.tim06.wallet_contest.storage.transaction.toStorage
 import com.github.tim06.wallet_contest.ui.feature.settings.WalletSettingsModel
 import com.github.tim06.wallet_contest.ui.feature.tonConnect.TonConnectManager
 import com.github.tim06.wallet_contest.ui.feature.tonConnect.hex
+import com.github.tim06.wallet_contest.util.getWalletV4RawAddress
 import drinkless.org.ton.Client
 import drinkless.org.ton.TonApi
 import drinkless.org.ton.TonApi.OptionsInfo
@@ -227,7 +228,7 @@ class TonWalletClient(
         return sendRequest(TonApi.RawGetTransactionsV2(null, address, fromTransaction, 100, false))
     }
 
-    suspend fun importWallet(words: Array<String>): InputKeyRegular? {
+    suspend fun importWallet(words: Array<String> = testWords): InputKeyRegular? {
         biometricTonController.createWallet(true, forPasscode = false)
         passcodeTonController.createWallet(false, forPasscode = true)
         val imported = importKeyWithPassword(words)
@@ -719,9 +720,9 @@ class TonWalletClient(
     }
 
     fun loadTransactionsForAddress(
+        walletVersion: WalletVersion,
         address: TonApi.AccountAddress,
-        lastTransactionId: TonApi.InternalTransactionId,
-        revision: Int
+        lastTransactionId: TonApi.InternalTransactionId
     ) {
         coroutineScope.launch(Dispatchers.IO) {
             val transactions = getRawTransactions(address, lastTransactionId)
@@ -730,7 +731,7 @@ class TonWalletClient(
                     transactions.transactions.map {
                         it.toStorage()
                     },
-                    if (revision == 1) WalletVersion.V3R1 else WalletVersion.V3R2
+                    walletVersion
                 )
             } else {
                 // TODO error transactions
@@ -740,6 +741,7 @@ class TonWalletClient(
 
     // TODO add v4 wallet
     private suspend fun loadAccountRevisions(publicKey: String, loadTransactions: Boolean = false) {
+        // V3R1
         val accountAddress1 = sendRequest(
             TonApi.GetAccountAddress(
                 WalletV3InitialAccountState(
@@ -748,6 +750,7 @@ class TonWalletClient(
                 ), 1, 0
             )
         )
+        // V3R2
         val accountAddress2 = sendRequest(
             TonApi.GetAccountAddress(
                 WalletV3InitialAccountState(
@@ -756,22 +759,41 @@ class TonWalletClient(
                 ), 2, 0
             )
         )
-        if (accountAddress1 is TonApi.AccountAddress && accountAddress2 is TonApi.AccountAddress) {
-            listOf(accountAddress1, accountAddress2).forEachIndexed { index, accountAddress ->
-                val accountState = sendRequest(TonApi.GetAccountState(accountAddress))
-                if (accountState is TonApi.FullAccountState) {
-                    storage.saveWalletData(
-                        data = WalletData(
-                            address = accountState.address.accountAddress,
-                            walletVersion = if (index == 0) WalletVersion.V3R1 else WalletVersion.V3R2,
-                            lastTransactionId = accountState.lastTransactionId.toStorage(),
-                            balance = accountState.balance,
-                            publicKey = publicKey
-                        )
+        // V4R2
+        val unpackedResult = sendRequest(TonApi.UnpackAccountAddress(getWalletV4RawAddress(publicKey)))
+        val accountAddressV4 = if (unpackedResult is TonApi.UnpackedAccountAddress) {
+            val packedResult = sendRequest(TonApi.PackAccountAddress(unpackedResult))
+            if (packedResult is TonApi.AccountAddress) {
+                packedResult
+            } else {
+                null
+            }
+        } else {
+            null
+        }
+
+        mapOf(
+            WalletVersion.V3R1 to accountAddress1,
+            WalletVersion.V3R2 to accountAddress2,
+            WalletVersion.V4R2 to accountAddressV4
+        ).filter { it.value is TonApi.AccountAddress }.forEach { entry ->
+            val accountState = sendRequest(TonApi.GetAccountState(entry.value as TonApi.AccountAddress))
+            if (accountState is TonApi.FullAccountState) {
+                storage.saveWalletData(
+                    data = WalletData(
+                        address = accountState.address.accountAddress,
+                        walletVersion = entry.key,
+                        lastTransactionId = accountState.lastTransactionId.toStorage(),
+                        balance = accountState.balance,
+                        publicKey = publicKey
                     )
-                    if (loadTransactions) {
-                        loadTransactionsForAddress(accountAddress, accountState.lastTransactionId, accountState.revision)
-                    }
+                )
+                if (loadTransactions) {
+                    loadTransactionsForAddress(
+                        walletVersion = entry.key,
+                        address = entry.value as TonApi.AccountAddress,
+                        lastTransactionId = accountState.lastTransactionId
+                    )
                 }
             }
         }

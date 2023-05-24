@@ -30,7 +30,7 @@ import com.github.tim06.wallet_contest.util.splitAddressToTwoLines
 fun TonSendPendingScreen(
     viewModel: TonSendPendingViewModel,
     address: String? = null,
-    amount: Long? = null,
+    amount: String? = null,
     onCloseClick: () -> Unit,
     onViewWalletClick: () -> Unit
 ) {
@@ -45,7 +45,7 @@ fun TonSendPendingScreen(
         ) {
             SuccessContent(
                 address = address.orEmpty(),
-                amount = amount ?: 0L,
+                amount = amount.orEmpty(),
                 onCloseClick = onCloseClick,
                 onViewWalletClick = onViewWalletClick
             )
@@ -102,7 +102,7 @@ private fun PendingContent(
 @Composable
 private fun SuccessContent(
     address: String,
-    amount: Long,
+    amount: String,
     onCloseClick: () -> Unit,
     onViewWalletClick: () -> Unit
 ) {
@@ -123,7 +123,7 @@ private fun SuccessContent(
                     modifier = Modifier.padding(horizontal = 40.dp),
                     icon = R.raw.success,
                     title = stringResource(id = R.string.send_sending_done_title),
-                    description = stringResource(id = R.string.send_sending_done_description, amount.formatCurrency())
+                    description = stringResource(id = R.string.send_sending_done_description, amount)
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),

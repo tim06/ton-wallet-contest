@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.tim06.wallet_contest.ton.TonWalletClient
+import com.github.tim06.wallet_contest.util.formatCurrency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class TonSendPendingViewModel(
     private val walletClient: TonWalletClient,
     private val destination: String? = null,
-    private val amount: Long? = null,
+    private val amount: String? = null,
     private val comment: String? = null
 ) : ViewModel() {
 
@@ -33,7 +34,7 @@ class TonSendPendingViewModel(
                     keyRegular = keyRegular,
                     message = comment.orEmpty(),
                     destinationAddress = destination.orEmpty(),
-                    amount = amount!!
+                    amount = amount?.toLong() ?: 0L
                 )
                 if (result is TonWalletClient.SendTonResponse.Success) {
                     _isSendSuccess.value = true
@@ -48,7 +49,7 @@ class TonSendPendingViewModel(
 class TonSendPendingViewModelFactory(
     private val tonWalletClient: TonWalletClient,
     private val destination: String? = null,
-    private val amount: Long? = null,
+    private val amount: String? = null,
     private val comment: String? = null
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

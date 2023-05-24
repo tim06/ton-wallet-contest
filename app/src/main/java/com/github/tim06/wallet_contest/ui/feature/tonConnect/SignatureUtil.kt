@@ -93,3 +93,8 @@ fun hex(s: String): ByteArray {
 fun base64(byteArray: ByteArray): String = Base64.Default.encode(byteArray)
 @OptIn(ExperimentalEncodingApi::class)
 fun base64(string: String): ByteArray = Base64.Default.decode(string)
+
+@OptIn(ExperimentalEncodingApi::class)
+fun base64Url(byteArray: ByteArray): String = Base64.UrlSafe.encode(byteArray)
+@OptIn(ExperimentalEncodingApi::class)
+fun base64Url(string: String): ByteArray = Base64.UrlSafe.decode(string)

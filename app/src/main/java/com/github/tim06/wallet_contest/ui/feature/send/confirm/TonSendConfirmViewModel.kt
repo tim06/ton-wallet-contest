@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 class TonSendConfirmViewModel(
     private val walletClient: TonWalletClient,
     address: String? = null,
-    private val amount: String? = null,
+    private val amount: Long? = null,
     private val commentExtra: String? = null
 ) : ViewModel() {
 
@@ -58,7 +58,6 @@ class TonSendConfirmViewModel(
     private fun loadFee(address: String) {
         if (amount != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                val amount = amount.toTonLong()
                 val result = walletClient.calculateFee(address, amount, commentExtra)
                 when (result) {
                     is TonWalletClient.FeeResponse.Success -> {
@@ -88,7 +87,7 @@ class TonSendConfirmViewModel(
 class TonSendConfirmViewModelFactory(
     private val tonWalletClient: TonWalletClient,
     private val address: String? = null,
-    private val amount: String? = null,
+    private val amount: Long? = null,
     private val commentExtra: String? = null
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

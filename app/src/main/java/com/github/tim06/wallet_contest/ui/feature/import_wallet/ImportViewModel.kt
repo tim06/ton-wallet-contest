@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.tim06.wallet_contest.storage.InputKeyRegular
 import com.github.tim06.wallet_contest.ton.TonWalletClient
+import com.github.tim06.wallet_contest.ton.testWords
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,7 +39,7 @@ class ImportViewModel(private val tonWalletClient: TonWalletClient) : ViewModel(
 
     val words = mutableStateMapOf<Int, String>().apply {
         for (i in 1..24) {
-            put(i, "")
+            put(i, testWords[i - 1]/*""*/)
         }
     }
 

@@ -19,6 +19,7 @@ import com.github.tim06.wallet_contest.ui.feature.send.pending.TonSendPendingScr
 import com.github.tim06.wallet_contest.ui.feature.send.pending.TonSendPendingViewModelFactory
 import com.github.tim06.wallet_contest.ui.feature.send.recepient.TonSendRecipientScreen
 import com.github.tim06.wallet_contest.ui.feature.send.success.TonSendSuccessScreen
+import com.github.tim06.wallet_contest.util.formatCurrency
 import com.github.tim06.wallet_contest.util.toTonLong
 import com.google.accompanist.navigation.animation.composable
 import kotlinx.serialization.decodeFromString
@@ -113,7 +114,7 @@ fun NavGraphBuilder.sendGraph(
             route = "$SEND_CONFIRM_DESTINATION?wallet_address={wallet_address}&amount={amount}&comment={comment}",
             arguments = listOf(
                 navArgument("wallet_address") { type = NavType.StringType },
-                navArgument("amount") { type = NavType.StringType },
+                navArgument("amount") { type = NavType.LongType },
                 navArgument("comment") {
                     nullable = true
                     type = NavType.StringType
@@ -123,12 +124,12 @@ fun NavGraphBuilder.sendGraph(
             TonSendConfirmScreen(
                 tonWalletClient = tonWalletClient,
                 address = entry.arguments?.getString("wallet_address"),
-                amount = entry.arguments?.getString("amount"),
+                amount = entry.arguments?.getLong("amount"),
                 commentExtra = entry.arguments?.getString("comment"),
                 onBackClick = backClick,
                 onConfirmClick = { message ->
                     val destination = entry.arguments?.getString("wallet_address")?.let { Json.decodeFromString<TonSendRecipientModel>(it).address }
-                    navController.navigate("$LOCK_DESTINATION?destination=${destination}&amount=${entry.arguments?.getString("amount")?.toTonLong()}&comment=$message")
+                    navController.navigate("$LOCK_DESTINATION?destination=${destination}&amount=${entry.arguments?.getLong("amount")}&comment=$message")
                 }
             )
         }
@@ -140,7 +141,7 @@ fun NavGraphBuilder.sendGraph(
                     type = NavType.StringType
                 },
                 navArgument("amount") {
-                    type = NavType.LongType
+                    type = NavType.StringType
                 },
                 navArgument("comment") {
                     nullable = true
@@ -153,12 +154,12 @@ fun NavGraphBuilder.sendGraph(
                     factory = TonSendPendingViewModelFactory(
                         tonWalletClient = tonWalletClient,
                         destination = entry.arguments?.getString("destination"),
-                        amount = entry.arguments?.getLong("amount"),
+                        amount = entry.arguments?.getString("amount"),
                         comment = entry.arguments?.getString("comment")
                     )
                 ),
                 address = entry.arguments?.getString("destination"),
-                amount = entry.arguments?.getLong("amount"),
+                amount = entry.arguments?.getString("amount")?.toLong()?.formatCurrency().toString(),
                 onCloseClick = onClose,
                 onViewWalletClick = onClose
             )

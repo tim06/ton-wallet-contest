@@ -183,7 +183,7 @@ fun TonWalletMainScreen(
                                     "destination"
                                 )
                             }&amount=${
-                                entry.arguments?.getString("amount")?.toTonLong()
+                                entry.arguments?.getString("amount")
                             }&comment=${entry.arguments?.getString("comment")}"
                         )
                     }

@@ -16,6 +16,7 @@ import com.github.tim06.wallet_contest.ui.components.topBar.TonTopAppBar
 import com.github.tim06.wallet_contest.ui.feature.import_wallet.ImportViewModelFactory
 import com.github.tim06.wallet_contest.ui.feature.send.TonSendContainer
 import com.github.tim06.wallet_contest.ui.feature.send.TonSendRecipientModel
+import com.github.tim06.wallet_contest.util.toTonLong
 import com.github.tim06.wallet_contest.util.transformAddress
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -33,7 +34,7 @@ fun TonSendAmountScreen(
     ),
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
-    onContinueClick: (String) -> Unit
+    onContinueClick: (Long) -> Unit
 ) {
     val walletBalance by viewModel.walletBalance.collectAsState()
     val enteredAmount by viewModel.enteredAmount.collectAsState()
@@ -97,7 +98,7 @@ fun TonSendAmountScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.send_continue),
-                click = { onContinueClick.invoke(enteredAmount) }
+                click = { onContinueClick.invoke(enteredAmount.toTonLong()) }
             )
             Spacer(modifier = Modifier.height(16.dp))
             AndroidView(

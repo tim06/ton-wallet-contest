@@ -1,6 +1,5 @@
 package com.github.tim06.wallet_contest.ui.feature.import_wallet.words
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow

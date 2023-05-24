@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.tim06.wallet_contest.ton.TonWalletClient
-import com.github.tim06.wallet_contest.ton.toStorage
 import com.github.tim06.wallet_contest.util.formatCurrency
 import com.github.tim06.wallet_contest.util.round
 import com.github.tim06.wallet_contest.util.toTonLong
