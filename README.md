@@ -13,7 +13,6 @@ With studio:
 4. Click run after sync
 
 With cli:
-1. Setup java version 17 as JAVA_HOME
 1. Clone project
 2. cd ton-wallet-contest
 3. ./gradlew app:assembleAfatRelease
