@@ -1,18 +1,39 @@
 package com.github.tim06.wallet_contest.ui.navigation
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
+import android.graphics.Bitmap
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.applyCanvas
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -21,6 +42,7 @@ import androidx.navigation.navDeepLink
 import com.github.tim06.wallet_contest.storage.Storage
 import com.github.tim06.wallet_contest.ton.TonWalletClient
 import com.github.tim06.wallet_contest.ui.components.camera.TonWalletCameraScreen
+import com.github.tim06.wallet_contest.ui.components.swipetoback.SwipeToBack
 import com.github.tim06.wallet_contest.ui.feature.dApps.DAppsScreen
 import com.github.tim06.wallet_contest.ui.feature.lock.LockScreen
 import com.github.tim06.wallet_contest.ui.feature.main.DeeplinkModel
@@ -29,7 +51,11 @@ import com.github.tim06.wallet_contest.ui.feature.main.history.details.TonTransa
 import com.github.tim06.wallet_contest.ui.feature.receive.TonReceiveScreen
 import com.github.tim06.wallet_contest.ui.feature.settings.WalletSettingsScreen
 import com.github.tim06.wallet_contest.ui.feature.start.StartScreen
-import com.github.tim06.wallet_contest.ui.feature.tonConnect.*
+import com.github.tim06.wallet_contest.ui.feature.tonConnect.BottomSheetState
+import com.github.tim06.wallet_contest.ui.feature.tonConnect.TonConnectBottomSheetConnectContent
+import com.github.tim06.wallet_contest.ui.feature.tonConnect.TonConnectEvent
+import com.github.tim06.wallet_contest.ui.feature.tonConnect.TonConnectViewModel
+import com.github.tim06.wallet_contest.ui.feature.tonConnect.TonConnectViewModelViewModelFactory
 import com.github.tim06.wallet_contest.ui.feature.tonConnect.transfer.TonConnectBottomSheetTransferContent
 import com.github.tim06.wallet_contest.ui.theme.BlackAlpha30
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -125,6 +151,7 @@ fun Navigation(
             val amount = backStackEntry.arguments?.getString("amount")
             val comment = backStackEntry.arguments?.getString("text")
             val navController = rememberAnimatedNavController()
+
             ModalBottomSheetLayout(
                 sheetState = modalSheetState,
                 sheetShape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp),
@@ -189,41 +216,63 @@ fun Navigation(
                     }
                 }
 
+                val view = LocalView.current
+                val bitmap = remember { mutableStateMapOf<String, Bitmap?>() }
+                val backStackState by navController.currentBackStackEntryAsState()
+                LaunchedEffect(key1 = backStackState) {
+                    backStackState?.let { stack ->
+                        val destinationRoute = stack.destination.route.orEmpty()
+                        if (destinationRoute != WALLET_MAIN_DESTINATION) {
+                            val resultDestination = if (destinationRoute.contains(LOCK_DESTINATION)) {
+                                stack.arguments?.getString("destination").orEmpty().takeWhile { it != '&' }
+                            } else if (destinationRoute.contains('&')) {
+                                destinationRoute.takeWhile { it != '&' }
+                            } else {
+                                destinationRoute
+                            }
+                            if (bitmap.contains(resultDestination).not()) {
+                                bitmap.put(
+                                    resultDestination,
+                                    Bitmap.createBitmap(
+                                        view.width, view.height,
+                                        Bitmap.Config.ARGB_8888
+                                    ).applyCanvas {
+                                        view.draw(this)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                var lastDestination by remember { mutableStateOf<String?>(null) }
+                val currentBgBitmap by remember {
+                    derivedStateOf {
+                        lastDestination?.let { bitmap.get(it) }
+                    }
+                }
+
+                SideEffect {
+                    if (backStackState?.destination?.route.orEmpty() != lastDestination) {
+                        lastDestination = backStackState?.destination?.route.orEmpty().takeWhile { it != '&' }
+                    }
+                }
+
+                if (currentBgBitmap != null) {
+                    Image(
+                        bitmap = currentBgBitmap!!.asImageBitmap(),
+                        contentDescription = "Background swipe to back"
+                    )
+                }
+
                 AnimatedNavHost(
                     modifier = Modifier.fillMaxSize(),
                     navController = navController,
                     startDestination = startDestination,
                     enterTransition = { slideInHorizontally(tween(500)) { it } },
-                    exitTransition = {
-                        shrinkOut(
-                            animationSpec = tween(
-                                durationMillis = 1000,
-                                delayMillis = 0,
-                                easing = { 0f }
-                            ),
-                            shrinkTowards = Alignment.Center,
-                            clip = false
-                        )
-                    },
-                    popEnterTransition = {
-                        fadeIn(tween(0))
-                        /*expandIn(
-                            animationSpec = tween(
-                                durationMillis = 0,
-                                delayMillis = 0,
-                                easing = { 0f }
-                            ),
-                            expandFrom = Alignment.Center,
-                            clip = false
-                        )*/
-                        /*fadeIn(
-                            animationSpec = tween(
-                                durationMillis = 0,
-                                easing = { 0f }
-                            )
-                        )*/
-                    },
-                    popExitTransition = { slideOutHorizontally(/*tween(500)*/) { it } }
+                    exitTransition = { ExitTransition.None },
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { slideOutHorizontally(tween(500)) { it } }
                 ) {
                     composable(START_DESTINATION) {
                         StartScreen(
@@ -235,24 +284,26 @@ fun Navigation(
                         )
                     }
                     composable(SETTINGS_DESTINATION) {
-                        WalletSettingsScreen(
-                            walletClient = tonWalletClient,
-                            onBackClick = {
-                                navController.popBackStack()
-                            },
-                            onListOfTokensClick = {
-                                navController.navigate("$LOCK_DESTINATION/successDestination=$CREATE_WALLET_RECOVERY_PHRASES_DESTINATION&standalone=true")
-                            },
-                            ondAppsClick = {
-                                navController.navigate(D_APPS_DESTINATION)
-                            },
-                            onShowRecoveryPhraseClick = {
-                                navController.navigate("$LOCK_DESTINATION/successDestination=$CREATE_WALLET_RECOVERY_PHRASES_DESTINATION&standalone=true")
-                            },
-                            onChangePasscodeClick = {
+                        SwipeToBack(onSwipeBack = { navController.popBackStack() }) {
+                            WalletSettingsScreen(
+                                walletClient = tonWalletClient,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                },
+                                onListOfTokensClick = {
+                                    navController.navigate("$LOCK_DESTINATION/successDestination=$CREATE_WALLET_RECOVERY_PHRASES_DESTINATION&standalone=true")
+                                },
+                                ondAppsClick = {
+                                    navController.navigate(D_APPS_DESTINATION)
+                                },
+                                onShowRecoveryPhraseClick = {
+                                    navController.navigate("$LOCK_DESTINATION/successDestination=$CREATE_WALLET_RECOVERY_PHRASES_DESTINATION&standalone=true")
+                                },
+                                onChangePasscodeClick = {
 
-                            }
-                        )
+                                }
+                            )
+                        }
                     }
                     composable(
                         route = WALLET_MAIN_DESTINATION
@@ -351,17 +402,24 @@ fun Navigation(
                     }
 
                     composable(D_APPS_DESTINATION) {
-                        DAppsScreen(
-                            tonConnectManager = tonWalletClient.tonConnectManager,
-                            storage = storage,
-                            onBackClick = {
-                                navController.popBackStack()
-                            }
-                        )
+                        SwipeToBack(
+                            onSwipeBack = { navController.popBackStack() }
+                        ) {
+                            DAppsScreen(
+                                tonConnectManager = tonWalletClient.tonConnectManager,
+                                storage = storage,
+                                onBackClick = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
                     }
 
                     createWalletGraph(navController, tonWalletClient)
-                    importWalletGraph(navController = navController, tonWalletClient = tonWalletClient)
+                    importWalletGraph(
+                        navController = navController,
+                        tonWalletClient = tonWalletClient
+                    )
                     passcodeSetupGraph(tonWalletClient, navController)
                     //sendGraph(navController, tonWalletClient)
                 }

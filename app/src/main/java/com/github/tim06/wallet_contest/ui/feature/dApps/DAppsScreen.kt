@@ -33,7 +33,7 @@ fun DAppsScreen(
     val manifests by storage.getTonConnectManifests1Flow().collectAsState(initial = emptyList())
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
             .systemBarsPadding()
     ) {
