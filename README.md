@@ -17,3 +17,7 @@ With cli:
 2. cd ton-wallet-contest
 3. ./gradlew app:assembleAfatRelease
 4. apk path: ton-wallet-contest/app/afat/release/app-afat-release.apk
+
+
+# APK
+APK file download url: https://github.com/tim06/ton-wallet-contest/releases/
