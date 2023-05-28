@@ -212,6 +212,10 @@ dependencies {
     // TODO replace with direct download image?
     implementation("io.coil-kt:coil-compose:2.3.0")
 
+    // TODO remove when v4 available from c++ code
+    implementation("io.github.neodix42:cell:0.1.5")
+    implementation("io.github.neodix42:smartcontract:0.1.5")
+
     // CameraX
     implementation "androidx.camera:camera-camera2:1.2.2"
     implementation "androidx.camera:camera-lifecycle:1.2.2"

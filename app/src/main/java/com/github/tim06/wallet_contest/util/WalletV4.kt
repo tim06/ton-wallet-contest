@@ -1,6 +1,7 @@
 package com.github.tim06.wallet_contest.util
 
 import com.github.tim06.wallet_contest.ui.feature.tonConnect.base64Url
+import org.ton.java.smartcontract.types.WalletVersion
 import org.ton.java.smartcontract.wallet.Options
 import org.ton.java.smartcontract.wallet.Wallet
 import org.ton.java.utils.Utils
@@ -12,7 +13,7 @@ fun getWalletV4RawAddress(publicKey: String): String {
         this.wc = 0L
     }
 
-    val wallet = Wallet(org.ton.java.smartcontract.types.WalletVersion.V4R2, options)
+    val wallet = Wallet(WalletVersion.V4R2, options)
     return wallet.create().address.toString(false)
 }
 
