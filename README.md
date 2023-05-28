@@ -21,3 +21,11 @@ With cli:
 
 # APK
 APK file download url: https://github.com/tim06/ton-wallet-contest/releases/
+
+# Troubleshooting on mac os
+  1. error: "Bad CPU type in executable".
+  command: ```softwareupdate --install-rosetta```
+  
+  2. error: "Unknown host CPU architecture: arm64".
+  fix: https://stackoverflow.com/a/69555276
+  
